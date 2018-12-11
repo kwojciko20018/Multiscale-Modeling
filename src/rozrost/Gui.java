@@ -60,10 +60,9 @@ public class Gui extends javax.swing.JFrame {
         ConditionsComboBox.setVisible(false);                      // TODO: UNCOMMENT TO ADD NEW NEIGHBORHOOD TYPES
         jLabel10.setVisible(false);
         recrystallizationSlider.setVisible(false);
-        recrystalButton.setVisible(false);
+        recrystalButton.setVisible(true);
         jLabel11.setVisible(false);
-        MonteCarloToogleButton.setVisible(false);
-        
+ 
         this.jLabel14.setVisible(false);
         this.jPanel5.setVisible(false);
         this.jPanel6.setVisible(false);
@@ -78,6 +77,11 @@ public class Gui extends javax.swing.JFrame {
         
         this.selectionTypeBox.setVisible(false);
         this.procedGrainSelection.setVisible(false);
+        
+        this.MCiterationLabel.setVisible(mC);
+        this.MCiterationText.setVisible(mC);
+        this.McJgbLabel.setVisible(mC);
+        this.McJgbText.setVisible(mC);
     }
 
     @SuppressWarnings("unchecked")
@@ -142,6 +146,16 @@ public class Gui extends javax.swing.JFrame {
         selectGrainsButton = new javax.swing.JButton();
         selectionTypeBox = new javax.swing.JComboBox<>();
         procedGrainSelection = new javax.swing.JButton();
+        McJgbLabel = new javax.swing.JLabel();
+        McJgbText = new javax.swing.JTextField();
+        MCiterationLabel = new javax.swing.JLabel();
+        MCiterationText = new javax.swing.JTextField();
+        jPanel11 = new javax.swing.JPanel();
+        EnergyDistributionButton = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        lowLevelEnergyField = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        highLevelEnergyField = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         ImportMenu = new javax.swing.JMenu();
         FromBitmapImport = new javax.swing.JMenuItem();
@@ -268,7 +282,7 @@ public class Gui extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         jPanel4.add(colorPanel, gridBagConstraints);
 
-        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 450, -1, -1));
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, -1, -1));
 
         jPanel7.setLayout(new java.awt.GridBagLayout());
 
@@ -418,7 +432,7 @@ public class Gui extends javax.swing.JFrame {
         });
         jPanel10.add(BCsButton);
 
-        recrystalButton.setText("Rekrystalizacja");
+        recrystalButton.setText("Recrystalize");
         recrystalButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 recrystalButtonActionPerformed(evt);
@@ -426,7 +440,7 @@ public class Gui extends javax.swing.JFrame {
         });
         jPanel10.add(recrystalButton);
 
-        jPanel1.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 480, 230, 40));
+        jPanel1.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 480, 370, 40));
 
         jLabel10.setText("Rekrystalizje: ");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 460, -1, -1));
@@ -493,10 +507,10 @@ public class Gui extends javax.swing.JFrame {
         jPanel1.add(addInclusionsButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 465, 120, 40));
 
         probabilityTextField.setText("90");
-        jPanel1.add(probabilityTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 270, 40, -1));
+        jPanel1.add(probabilityTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 280, 40, -1));
 
         probabilityOfGrowth.setText("Probability of growth");
-        jPanel1.add(probabilityOfGrowth, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 250, -1, -1));
+        jPanel1.add(probabilityOfGrowth, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 260, -1, -1));
 
         selectGrainsButton.setText("Select Grains");
         selectGrainsButton.addActionListener(new java.awt.event.ActionListener() {
@@ -521,6 +535,57 @@ public class Gui extends javax.swing.JFrame {
             }
         });
         jPanel1.add(procedGrainSelection, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 520, 100, 40));
+
+        McJgbLabel.setText("MonteCarlo Jgb");
+        jPanel1.add(McJgbLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 250, -1, -1));
+
+        McJgbText.setText("1");
+        jPanel1.add(McJgbText, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 270, 70, -1));
+
+        MCiterationLabel.setText("MonteCarlo iteration ");
+        jPanel1.add(MCiterationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 300, 130, 30));
+
+        MCiterationText.setText("100");
+        MCiterationText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MCiterationTextActionPerformed(evt);
+            }
+        });
+        jPanel1.add(MCiterationText, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 330, 70, -1));
+
+        EnergyDistributionButton.setText("Energy Distribution");
+        EnergyDistributionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EnergyDistributionButtonActionPerformed(evt);
+            }
+        });
+        jPanel11.add(EnergyDistributionButton);
+
+        jLabel7.setText("Low Energy level");
+        jPanel11.add(jLabel7);
+
+        lowLevelEnergyField.setText("1");
+        lowLevelEnergyField.setMinimumSize(new java.awt.Dimension(100, 22));
+        lowLevelEnergyField.setPreferredSize(new java.awt.Dimension(20, 22));
+        lowLevelEnergyField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lowLevelEnergyFieldActionPerformed(evt);
+            }
+        });
+        jPanel11.add(lowLevelEnergyField);
+
+        jLabel13.setText("High Energy Level");
+        jPanel11.add(jLabel13);
+
+        highLevelEnergyField.setText("10");
+        highLevelEnergyField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                highLevelEnergyFieldActionPerformed(evt);
+            }
+        });
+        jPanel11.add(highLevelEnergyField);
+
+        jPanel1.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, 150, 150));
 
         getContentPane().add(jPanel1, new java.awt.GridBagConstraints());
 
@@ -651,7 +716,7 @@ public class Gui extends javax.swing.JFrame {
 
     private void GenerateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateButtonActionPerformed
         if (mC) {
-            monteCarlo = new MonteCarlo(size_x, size_y, Integer.parseInt(randomSeedsCountText.getText()));
+            monteCarlo.setSeedsCount(Integer.parseInt(randomSeedsCountText.getText()));
             boardGrain = monteCarlo.randomBoard();
             canvas1.setGrains(boardGrain);
             canvas1.repaint();
@@ -739,6 +804,15 @@ public class Gui extends javax.swing.JFrame {
     private void MonteCarloToogleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MonteCarloToogleButtonActionPerformed
         mC = !mC;
         this.jPanel5.setVisible(mC);
+        this.MCiterationLabel.setVisible(mC);
+        this.MCiterationText.setVisible(mC);
+        this.McJgbLabel.setVisible(mC);
+        this.McJgbText.setVisible(mC);
+        if(mC)
+            monteCarlo.setBoard(board.getBoard());
+        else
+            board.setBoard(monteCarlo.getBoard());
+        
     }//GEN-LAST:event_MonteCarloToogleButtonActionPerformed
     
     private void FromBitmapImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FromBitmapImportActionPerformed
@@ -776,7 +850,6 @@ public class Gui extends javax.swing.JFrame {
             {
                 if(cl == white)
                 {
-                    System.err.println("KOLOR JEST BIALY");
                     colorMapping.put(cl, -1);
                 }
                 else
@@ -939,33 +1012,83 @@ public class Gui extends javax.swing.JFrame {
     }//GEN-LAST:event_selectionTypeBoxActionPerformed
 
     private void procedGrainSelectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_procedGrainSelectionActionPerformed
-        if (this.selectionTypeBox.getSelectedIndex() == 1 || this.selectionTypeBox.getSelectedIndex() == 0 )
-            boardGrain = board.removeAllGrainsExceptSeleected(selectedGrainList);
-        
-        if (this.selectionTypeBox.getSelectedIndex() == 1) 
-            boardGrain = board.dualPhaseIdChange();
-        
-        if ( this.selectionTypeBox.getSelectedIndex() == 2)
+        if(this.mC)
         {
-            boardGrain = board.growBoundaries(2, selectedGrainList);
+            System.err.println("DUPA");
+            if (this.selectionTypeBox.getSelectedIndex() == 1 || this.selectionTypeBox.getSelectedIndex() == 0 )
+                boardGrain = monteCarlo.removeAllGrainsExceptSeleected(selectedGrainList);
+
+            if (this.selectionTypeBox.getSelectedIndex() == 1) 
+            {
+                boardGrain = monteCarlo.dualPhaseIdChange();
+                selectedGrainList.clear();
+            }
+            if ( this.selectionTypeBox.getSelectedIndex() == 2)
+            {
+                boardGrain = monteCarlo.growBoundaries(2, selectedGrainList);
+            }
+        }
+        else
+        {
+            if (this.selectionTypeBox.getSelectedIndex() == 1 || this.selectionTypeBox.getSelectedIndex() == 0 )
+                boardGrain = board.removeAllGrainsExceptSeleected(selectedGrainList);
+
+            if (this.selectionTypeBox.getSelectedIndex() == 1) 
+            {
+                boardGrain = board.dualPhaseIdChange();
+                selectedGrainList.clear();
+            }
+
+            if ( this.selectionTypeBox.getSelectedIndex() == 2)
+            {
+                boardGrain = board.growBoundaries(2, selectedGrainList);
+            }
         }
        canvas1.setGrains(boardGrain);
        canvas1.repaint();
     }//GEN-LAST:event_procedGrainSelectionActionPerformed
 
+    private void MCiterationTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MCiterationTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MCiterationTextActionPerformed
+
+    private void EnergyDistributionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnergyDistributionButtonActionPerformed
+        int lowEnergyValue = Integer.parseInt(this.lowLevelEnergyField.getText());
+        int highEnergyValue = Integer.parseInt(this.highLevelEnergyField.getText());
+        
+        EnergyDistributionFrame eDistribution = new EnergyDistributionFrame();
+        eDistribution.getCanvas().setGrains(boardGrain);
+        eDistribution.getCanvas().repaint();
+        eDistribution.setVisible(true);
+    }//GEN-LAST:event_EnergyDistributionButtonActionPerformed
+
+    private void lowLevelEnergyFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lowLevelEnergyFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lowLevelEnergyFieldActionPerformed
+
+    private void highLevelEnergyFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_highLevelEnergyFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_highLevelEnergyFieldActionPerformed
+
     private void sim() {
 
         if (mC) {
             simLoop = true;
-            while (simLoop) {
+            int currentIteration = 0;
+            int iterationNumber = Integer.parseInt(this.MCiterationText.getText());
+            float grainBoundaryEnergy = Float.parseFloat(this.McJgbText.getText());
+            while (currentIteration < iterationNumber && simLoop) {
                 time++;
                 jLabel12.setText("Czas: " + time);
-                boardGrain = monteCarlo.calculate();
+                monteCarlo.setGrainsToSkip(selectedGrainList);
+                boardGrain = monteCarlo.calculate(grainBoundaryEnergy);
                 canvas1.setGrains(boardGrain);
                 canvas1.repaint();
                 if (monteCarlo.getChanged() == 0) {
                     simLoop = false;
                 }
+                currentIteration++;
+                if(currentIteration >= iterationNumber) simLoop = false;
             }
         } else {
             simLoop = true;
@@ -1004,7 +1127,7 @@ public class Gui extends javax.swing.JFrame {
             while (simLoop) {
                 time++;
                 jLabel12.setText("Czas: " + time);
-                boardGrain = monteCarlo.calculate();
+                boardGrain = monteCarlo.calculate(1);
                 canvas1.setGrains(boardGrain);
                 canvas1.repaint();
                 if (monteCarlo.getChanged() == 0) {
@@ -1101,6 +1224,7 @@ public class Gui extends javax.swing.JFrame {
     private void addGrainToListOnMouseClick(int x, int y)
     {
         selectedGrainList.add(boardGrain[x][y].getId());
+        System.err.println(selectedGrainList);
     }
 
     public static void main(String args[]) {
@@ -1147,11 +1271,16 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JToggleButton BCsButton;
     private javax.swing.JButton ClearButton;
     private javax.swing.JComboBox ConditionsComboBox;
+    private javax.swing.JButton EnergyDistributionButton;
     private javax.swing.JMenu ExportMenu;
     private javax.swing.JMenuItem FromBitmapImport;
     private javax.swing.JMenuItem FromTextFileImport;
     private javax.swing.JButton GenerateButton;
     private javax.swing.JMenu ImportMenu;
+    private javax.swing.JLabel MCiterationLabel;
+    private javax.swing.JTextField MCiterationText;
+    private javax.swing.JLabel McJgbLabel;
+    private javax.swing.JTextField McJgbText;
     private javax.swing.JToggleButton MonteCarloToogleButton;
     private javax.swing.JComboBox NeighborhoodComboBox;
     private javax.swing.JLabel NeighborhoodLabel;
@@ -1167,6 +1296,7 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JLabel colorValueLabel;
     private javax.swing.JTextField countXText;
     private javax.swing.JTextField countYText;
+    private javax.swing.JTextField highLevelEnergyField;
     private javax.swing.JLabel idLabel;
     private javax.swing.JComboBox<String> inclusionShapeComboBox;
     private javax.swing.JTextField inclusionsAmount;
@@ -1175,17 +1305,20 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1196,6 +1329,7 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextField lowLevelEnergyField;
     private javax.swing.JLabel probabilityOfGrowth;
     private javax.swing.JTextField probabilityTextField;
     private javax.swing.JButton procedGrainSelection;

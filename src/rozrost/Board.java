@@ -308,7 +308,7 @@ public class Board {
         endSimulation = true;
         double suma = 0;
         ro = reA / reB + (1 - (reA / reB)) * Math.exp(-1 * reB * dT);
-        System.out.print(String.format("%.12f   ",ro));
+        //System.out.print(String.format("%.12f   ",ro));
         roSr = ro / (size_x * size_y);
 
         for (int i = 0; i < size_x; i++) {
@@ -670,11 +670,15 @@ public class Board {
     
      public Grain[][] removeAllGrainsExceptSeleected(ArrayList<Integer> selectedGrains)
     {
+        for(int i =0; i<selectedGrains.size(); i++)
+            System.err.println(selectedGrains.get(i));
+        
         for (int i = 0; i < size_x; i++) {
             for (int j = 0; j < size_y; j++) {
-                 if(!selectedGrains.contains(boardGrain[i][j].getId()))
-                     boardGrain[i][j].setId(0);
-            }
+                if(!selectedGrains.contains(boardGrain[i][j].getId()))
+                {
+                    boardGrain[i][j].setId(0);
+            }}
         }
         return boardGrain;
     }
@@ -770,5 +774,20 @@ public class Board {
                     boardGrain[i][j].setB(false);
             }
         }
+    }
+    
+    void setBoard(Grain boardGrain[][])
+    {
+        this.boardGrain = boardGrain;
+    }
+    
+    Grain[][] getBoard()
+    {
+        return this.boardGrain;
+    }
+    
+    ArrayList<Integer> getGrainsToSkip()
+    {
+        return this.grainsToSkip;
     }
 }
