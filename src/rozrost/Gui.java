@@ -58,10 +58,8 @@ public class Gui extends javax.swing.JFrame {
         initComponents();
         jLabel12.setText("Time: " + time);                  // czas jaki trwa symulacja
         ConditionsComboBox.setVisible(false);                      // TODO: UNCOMMENT TO ADD NEW NEIGHBORHOOD TYPES
-        jLabel10.setVisible(false);
-        recrystallizationSlider.setVisible(false);
         recrystalButton.setVisible(true);
-        jLabel11.setVisible(false);
+        GrainBoundaryEnergyLabel.setVisible(true);
  
         this.jLabel14.setVisible(false);
         this.jPanel5.setVisible(false);
@@ -73,13 +71,12 @@ public class Gui extends javax.swing.JFrame {
         jLabel9.setText("" + board.getCountGrainsCristal());// ilosc ziaren
         canvas1.addMouseListener(handler);                  // dodanie obslugi myszy
         canvas1.addMouseMotionListener(handler);
-        jLabel11.setText(recrystallizationSlider.getValue() + " %");       //ustawienie % rekrystalizacji w GUI
         
         this.selectionTypeBox.setVisible(false);
         this.procedGrainSelection.setVisible(false);
         
-        this.MCiterationLabel.setVisible(mC);
-        this.MCiterationText.setVisible(mC);
+        this.MCiterationLabel.setVisible(true);
+        this.MCiterationText.setVisible(true);
         this.McJgbLabel.setVisible(mC);
         this.McJgbText.setVisible(mC);
     }
@@ -128,10 +125,9 @@ public class Gui extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         BCsButton = new javax.swing.JToggleButton();
-        recrystalButton = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        recrystallizationSlider = new javax.swing.JSlider();
-        jLabel11 = new javax.swing.JLabel();
+        selectGrainsButton = new javax.swing.JButton();
+        selectionTypeBox = new javax.swing.JComboBox<>();
+        procedGrainSelection = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         randomSeedsCountText = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -143,19 +139,25 @@ public class Gui extends javax.swing.JFrame {
         addInclusionsButton = new javax.swing.JButton();
         probabilityTextField = new javax.swing.JTextField();
         probabilityOfGrowth = new javax.swing.JLabel();
-        selectGrainsButton = new javax.swing.JButton();
-        selectionTypeBox = new javax.swing.JComboBox<>();
-        procedGrainSelection = new javax.swing.JButton();
         McJgbLabel = new javax.swing.JLabel();
         McJgbText = new javax.swing.JTextField();
-        MCiterationLabel = new javax.swing.JLabel();
-        MCiterationText = new javax.swing.JTextField();
         jPanel11 = new javax.swing.JPanel();
         EnergyDistributionButton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         lowLevelEnergyField = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         highLevelEnergyField = new javax.swing.JTextField();
+        jPanel12 = new javax.swing.JPanel();
+        recrystalButton = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        recrystalizedOnBegining = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        grainInEveryStep = new javax.swing.JTextField();
+        onlyBoundaries = new javax.swing.JCheckBox();
+        MCiterationLabel = new javax.swing.JLabel();
+        MCiterationText = new javax.swing.JTextField();
+        GrainBoundaryEnergyLabel = new javax.swing.JLabel();
+        grainBoundariesEnergy = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         ImportMenu = new javax.swing.JMenu();
         FromBitmapImport = new javax.swing.JMenuItem();
@@ -432,30 +434,31 @@ public class Gui extends javax.swing.JFrame {
         });
         jPanel10.add(BCsButton);
 
-        recrystalButton.setText("Recrystalize");
-        recrystalButton.addActionListener(new java.awt.event.ActionListener() {
+        selectGrainsButton.setText("Select Grains");
+        selectGrainsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                recrystalButtonActionPerformed(evt);
+                selectGrainsButtonActionPerformed(evt);
             }
         });
-        jPanel10.add(recrystalButton);
+        jPanel10.add(selectGrainsButton);
 
-        jPanel1.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 480, 370, 40));
-
-        jLabel10.setText("Rekrystalizje: ");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 460, -1, -1));
-
-        recrystallizationSlider.setMinimumSize(new java.awt.Dimension(100, 16));
-        recrystallizationSlider.setPreferredSize(new java.awt.Dimension(100, 16));
-        recrystallizationSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                recrystallizationSliderStateChanged(evt);
+        selectionTypeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selection DualPhase", "Selection NewPhase", "Get Boundaries" }));
+        selectionTypeBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectionTypeBoxActionPerformed(evt);
             }
         });
-        jPanel1.add(recrystallizationSlider, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 460, -1, -1));
+        jPanel10.add(selectionTypeBox);
 
-        jLabel11.setText("0 %");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 460, -1, -1));
+        procedGrainSelection.setText("Proced");
+        procedGrainSelection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                procedGrainSelectionActionPerformed(evt);
+            }
+        });
+        jPanel10.add(procedGrainSelection);
+
+        jPanel1.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 530, 660, 40));
 
         jLabel3.setText("Seeds count");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 200, -1, -1));
@@ -512,46 +515,11 @@ public class Gui extends javax.swing.JFrame {
         probabilityOfGrowth.setText("Probability of growth");
         jPanel1.add(probabilityOfGrowth, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 260, -1, -1));
 
-        selectGrainsButton.setText("Select Grains");
-        selectGrainsButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectGrainsButtonActionPerformed(evt);
-            }
-        });
-        jPanel1.add(selectGrainsButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 520, 110, 40));
-
-        selectionTypeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selection DualPhase", "Selection NewPhase", "Get Boundaries" }));
-        selectionTypeBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectionTypeBoxActionPerformed(evt);
-            }
-        });
-        jPanel1.add(selectionTypeBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 520, 150, 40));
-
-        procedGrainSelection.setText("Proced");
-        procedGrainSelection.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                procedGrainSelectionActionPerformed(evt);
-            }
-        });
-        jPanel1.add(procedGrainSelection, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 520, 100, 40));
-
         McJgbLabel.setText("MonteCarlo Jgb");
-        jPanel1.add(McJgbLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 250, -1, -1));
+        jPanel1.add(McJgbLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 250, -1, -1));
 
         McJgbText.setText("1");
         jPanel1.add(McJgbText, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 270, 70, -1));
-
-        MCiterationLabel.setText("MonteCarlo iteration ");
-        jPanel1.add(MCiterationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 300, 130, 30));
-
-        MCiterationText.setText("100");
-        MCiterationText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MCiterationTextActionPerformed(evt);
-            }
-        });
-        jPanel1.add(MCiterationText, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 330, 70, -1));
 
         EnergyDistributionButton.setText("Energy Distribution");
         EnergyDistributionButton.addActionListener(new java.awt.event.ActionListener() {
@@ -585,7 +553,70 @@ public class Gui extends javax.swing.JFrame {
         });
         jPanel11.add(highLevelEnergyField);
 
-        jPanel1.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, 150, 150));
+        jPanel1.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 400, 170, 90));
+
+        recrystalButton.setText("Recrystalize");
+        recrystalButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recrystalButtonActionPerformed(evt);
+            }
+        });
+        jPanel12.add(recrystalButton);
+
+        jLabel15.setText("Grains recrystilized on begining ");
+        jPanel12.add(jLabel15);
+
+        recrystalizedOnBegining.setText("30");
+        recrystalizedOnBegining.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recrystalizedOnBeginingActionPerformed(evt);
+            }
+        });
+        jPanel12.add(recrystalizedOnBegining);
+
+        jLabel16.setText("Grains recrystalized on every step");
+        jPanel12.add(jLabel16);
+
+        grainInEveryStep.setText("0");
+        grainInEveryStep.setPreferredSize(new java.awt.Dimension(20, 22));
+        grainInEveryStep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                grainInEveryStepActionPerformed(evt);
+            }
+        });
+        jPanel12.add(grainInEveryStep);
+
+        onlyBoundaries.setText("Recrystalize only on boundaries");
+        onlyBoundaries.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onlyBoundariesActionPerformed(evt);
+            }
+        });
+        jPanel12.add(onlyBoundaries);
+
+        MCiterationLabel.setText("Maximum iterations");
+        jPanel12.add(MCiterationLabel);
+
+        MCiterationText.setText("100");
+        MCiterationText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MCiterationTextActionPerformed(evt);
+            }
+        });
+        jPanel12.add(MCiterationText);
+
+        GrainBoundaryEnergyLabel.setText("Grain Boundary energy");
+        jPanel12.add(GrainBoundaryEnergyLabel);
+
+        grainBoundariesEnergy.setText("0.6");
+        grainBoundariesEnergy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                grainBoundariesEnergyActionPerformed(evt);
+            }
+        });
+        jPanel12.add(grainBoundariesEnergy);
+
+        jPanel1.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 370, 270, 220));
 
         getContentPane().add(jPanel1, new java.awt.GridBagConstraints());
 
@@ -679,11 +710,6 @@ public class Gui extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ToBitmapExportActionPerformed
 
-    private void recrystallizationSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_recrystallizationSliderStateChanged
-        jLabel11.setText(recrystallizationSlider.getValue() + " %");
-        board.setRecrystalPercent(recrystallizationSlider.getValue());
-    }//GEN-LAST:event_recrystallizationSliderStateChanged
-
     private void recrystalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recrystalButtonActionPerformed
         time = 0;
         jLabel12.setText("Czas: " + time);
@@ -708,6 +734,7 @@ public class Gui extends javax.swing.JFrame {
     private void ClearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearButtonActionPerformed
         time = 0;                                                      // zeruje czas
         jLabel12.setText("Czas: " + time);                              // ustawia wyzerowany czas
+        board.clearRecrystal();
         boardGrain = board.clear();                                     // czyscimy nasza "plansze"
         canvas1.setGrains(boardGrain);                                  // pokazujemy wyczyszczoną "plansze"
         canvas1.repaint();
@@ -1070,6 +1097,22 @@ public class Gui extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_highLevelEnergyFieldActionPerformed
 
+    private void recrystalizedOnBeginingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recrystalizedOnBeginingActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_recrystalizedOnBeginingActionPerformed
+
+    private void grainInEveryStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_grainInEveryStepActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_grainInEveryStepActionPerformed
+
+    private void grainBoundariesEnergyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_grainBoundariesEnergyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_grainBoundariesEnergyActionPerformed
+
+    private void onlyBoundariesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onlyBoundariesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_onlyBoundariesActionPerformed
+
     private void sim() {
 
         if (mC) {
@@ -1136,24 +1179,29 @@ public class Gui extends javax.swing.JFrame {
             }
         } else {
             simLoop = true;
+            int lowEnergyValue = Integer.parseInt(this.lowLevelEnergyField.getText());
+            int highEnergyValue = Integer.parseInt(this.highLevelEnergyField.getText());
+            boardGrain = board.setH(lowEnergyValue, highEnergyValue);
+            canvas1.setGrains(boardGrain);
+            canvas1.repaint();
+            int maxIteration = Integer.parseInt(MCiterationText.getText());
+            int it = 0;
+            boardGrain = board.addNewRecrystalizedGrains(onlyBoundaries.isSelected(),
+                    Integer.parseInt(recrystalizedOnBegining.getText()));
             while (simLoop) {
                 time++;
                 jLabel12.setText("Czas: " + time);
-                try {
-                    Thread.sleep(30);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                dT += 0.001;
-                boardGrain = board.reCalculate(NeighborhoodComboBox.getSelectedIndex(), dT);
+                boardGrain = board.addNewRecrystalizedGrains(onlyBoundaries.isSelected(), Integer.parseInt(grainInEveryStep.getText()));
+                boardGrain = board.reCalculate(NeighborhoodComboBox.getSelectedIndex(), Float.parseFloat(grainBoundariesEnergy.getText()));
+                it++;
                 simLoop = board.recrystal() != (size_x * size_y);
+                if (it > maxIteration)
+                    simLoop = false;
                 canvas1.setGrains(boardGrain);
                 canvas1.repaint();
                 jLabel9.setText("" + board.getCountGrainsRecristal());
                 if (!simLoop) {
                     boardGrain = board.edge();
-                    board.clearRecrystal();
                     t.stop();
                 }
             }
@@ -1206,9 +1254,11 @@ public class Gui extends javax.swing.JFrame {
         int R = boardGrain[i][j].getR();
         int G = boardGrain[i][j].getG();
         int B = boardGrain[i][j].getB();
+        int x = boardGrain[i][j].getX();
+        int y = boardGrain[i][j].getY();
         int grain = boardGrain[i][j].getId();  // pobieranie aktualnego ziarna, na ktorym jest myszka  i obliczanie jego RGB
         idLabel.setText("" + boardGrain[i][j].getId());
-        colorValueLabel.setText("(" + R + "," + G + "," + B + ")" + "     " + boardGrain[i][j].isB());
+        colorValueLabel.setText("(" + x + "," + y + ")" + "     " + boardGrain[i][j].isR());
         colorPanel.setBackground(new Color(R, G, B));
     }
 
@@ -1276,6 +1326,7 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JMenuItem FromBitmapImport;
     private javax.swing.JMenuItem FromTextFileImport;
     private javax.swing.JButton GenerateButton;
+    private javax.swing.JLabel GrainBoundaryEnergyLabel;
     private javax.swing.JMenu ImportMenu;
     private javax.swing.JLabel MCiterationLabel;
     private javax.swing.JTextField MCiterationText;
@@ -1296,17 +1347,19 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JLabel colorValueLabel;
     private javax.swing.JTextField countXText;
     private javax.swing.JTextField countYText;
+    private javax.swing.JTextField grainBoundariesEnergy;
+    private javax.swing.JTextField grainInEveryStep;
     private javax.swing.JTextField highLevelEnergyField;
     private javax.swing.JLabel idLabel;
     private javax.swing.JComboBox<String> inclusionShapeComboBox;
     private javax.swing.JTextField inclusionsAmount;
     private javax.swing.JTextField inclusionsSize;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1319,6 +1372,7 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1330,6 +1384,7 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField lowLevelEnergyField;
+    private javax.swing.JCheckBox onlyBoundaries;
     private javax.swing.JLabel probabilityOfGrowth;
     private javax.swing.JTextField probabilityTextField;
     private javax.swing.JButton procedGrainSelection;
@@ -1337,7 +1392,7 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JTextField radiusText;
     private javax.swing.JTextField randomSeedsCountText;
     private javax.swing.JButton recrystalButton;
-    private javax.swing.JSlider recrystallizationSlider;
+    private javax.swing.JTextField recrystalizedOnBegining;
     private javax.swing.JTextField ringSizeField;
     private javax.swing.JButton selectGrainsButton;
     private javax.swing.JComboBox<String> selectionTypeBox;

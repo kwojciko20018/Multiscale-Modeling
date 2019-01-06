@@ -39,7 +39,9 @@ public class CanvasEnergy extends JComponent{
     public void setRGB(Grain[][] grains) {
         for(int j=0;j<size_y;j++){
             for(int i=0;i<size_x;i++){
-                if (grains[i][j].isB() || grains[i][j].isR())
+                if (grains[i][j].isR())
+                    grains[i][j].setRGB(0, 255, 0);
+                else if (grains[i][j].isB())
                     grains[i][j].setRGB(255, 0, 0);
                 else
                     grains[i][j].setRGB(0, 0, 255);

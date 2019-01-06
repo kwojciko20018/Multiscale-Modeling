@@ -1,6 +1,9 @@
 package rozrost;
 
 import java.awt.Color;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -219,6 +222,19 @@ public class Board {
         countGrainsCristal = n;
         return boardGrain;
     }
+    
+    public Grain[][] setH(int low, int high)
+    {
+        for (int i = 0; i < size_x; i++) {
+            for (int j = 0; j < size_y; j++) {
+                if (boardGrain[i][j].isB()) 
+                    boardGrain[i][j].setH(high);
+                else 
+                    boardGrain[i][j].setH(low);
+            }
+    }
+    return boardGrain;
+    }
 
     public int recrystal() {
         int sum = 0;
@@ -303,86 +319,178 @@ public class Board {
 
         return boardGrain;
     }
-
-    public Grain[][] reCalculate(int areaSetup, double dT) {
-        endSimulation = true;
-        double suma = 0;
-        ro = reA / reB + (1 - (reA / reB)) * Math.exp(-1 * reB * dT);
-        //System.out.print(String.format("%.12f   ",ro));
-        roSr = ro / (size_x * size_y);
-
-        for (int i = 0; i < size_x; i++) {
-            for (int j = 0; j < size_y; j++) {
-                
-                if ( (boardGrain[i][j].isB() || contentGrains ) && !boardGrain[i][j].isR()) {
-                    if (rand.nextDouble() > (1 - recrystalPercent/100)) { // zwiększa ro tylko % ziaren
-                        double add = roSr * (1.2 + rand.nextDouble() * 0.6);
-                        boardGrain[i][j].addRo(add);
-                        endSimulation = false;
-                    }
-                    if (boardGrain[i][j].getRo() > roMax) {
-                        n++;
-                        boardGrain[i][j].setId(n);
-                        boardGrain[i][j].setB(false);
-                        boardGrain[i][j].setR(true);
-                        boardGrain[i][j].setRo(0);
-                        countGrainsRecristal++;
-                        endSimulation = false;
-                    }
-                } else {
-                    double add = roSr * (rand.nextDouble() * 0.3);
-                    boardGrain[i][j].addRo(add);
-                }
-            }
+    
+    public Grain[][] addNewRecrystalizedGrains(boolean onlyBoundaries, int numberOfGrains)
+    {
+        int grainsAddedInCurrentIteration = 0;
+        while(grainsAddedInCurrentIteration < numberOfGrains)
+        {
+            int x = rand.nextInt(size_x);
+            int y = rand.nextInt(size_y);
+            if((onlyBoundaries && !boardGrain[x][y].isB()) || boardGrain[x][y].isR())
+                continue;
+            n++;
+            boardGrain[x][y].setR(true);
+            boardGrain[x][y].setId(n);
+            boardGrain[x][y].setH(0);
+            grainsAddedInCurrentIteration++;
         }
-        
-
-        for (int i = 0; i < size_x; i++) {
-            for (int j = 0; j < size_y; j++) {
-                boardGrain_tmp[i][j].setId(boardGrain[i][j].getId());
-            }
-        }
-
-        int tmp[][] = new int[3][3];
-
-        for (int i = 0; i < size_x; i++) {
-            for (int j = 0; j < size_y; j++) {
-                if (!boardGrain[i][j].isR()){
-                    if (areaSetup == 7) {
-                        tmp = createArea(i, j, 6, true);
-                        board_tmp[i][j] = area(tmp);
-                    } else {
-                        tmp = createArea(i, j, areaSetup, true);
-                        board_tmp[i][j] = area(tmp);
-                    }
-                    boardGrain_tmp[i][j].setId(board_tmp[i][j]);
-                }
-            }
-        }
-
-        for (int i = 0; i < size_x; i++) {
-            for (int j = 0; j < size_y; j++) {
-                if (boardGrain_tmp[i][j].getId() > 0) {
-
-                    endSimulation = false;
-                    boardGrain[i][j].setId(boardGrain_tmp[i][j].getId());
-                    boardGrain[i][j].setB(false);
-                    boardGrain[i][j].setR(true);
-                    boardGrain[i][j].setRo(0);
-                }
-            }
-        }
-        
-        for (int i = 0; i < size_x; i++) {
-            for (int j = 0; j < size_y; j++) {
-                suma += boardGrain[i][j].getRo();
-            }
-        }
-        System.out.println(String.format("%.12f",suma));
-        
         return boardGrain;
-
     }
+    
+    public Grain[][] reCalculate(int areaSetup, float grainBoundaryEnergy)
+    {
+        PrintWriter writer;
+        try {
+            writer = new PrintWriter("the-file-name.txt", "UTF-8");
+
+        ArrayList<Grain> grains = new ArrayList<Grain>();
+        for(int itX = 0 ; itX <size_x; ++itX)
+            for(int itY = 0 ; itY <size_y; ++itY)
+                if(!boardGrain[itX][itY].isR())
+                    grains.add(boardGrain[itX][itY]);
+        
+        while(grains.size() > 0)
+        {
+            Grain selectedGrain = grains.get(rand.nextInt(grains.size()));
+            ArrayList<Grain> neighbours = getRecrystalizedNeighbours(selectedGrain.getX(), selectedGrain.getY());
+            if (neighbours.isEmpty()) 
+            {
+                grains.remove(selectedGrain);
+                continue;
+            }
+            else
+            {
+               writer.println("SASIEDZI PANA x="+selectedGrain.getX()+" y ="+selectedGrain.getY());
+                for( Grain grain : neighbours)
+                    writer.println("SASIAD " + grain.getId()+ " x= " + grain.getX() + " y= " + grain.getY());
+                writer.println();
+            }
+            int[][] tmp = createArea(selectedGrain.getX(), selectedGrain.getY(), areaSetup, false);
+            float powerBeffore = power(tmp, grainBoundaryEnergy) + (float)selectedGrain.getH() ;
+            
+            Grain randomNeighbour = neighbours.get(rand.nextInt(neighbours.size()));
+            
+            int oldH = selectedGrain.getH();
+            int oldId = selectedGrain.getId();
+           
+            selectedGrain.setH(0);
+            selectedGrain.setId(randomNeighbour.getId());
+            selectedGrain.setR(true);
+            
+            tmp[1][1] = randomNeighbour.getId();
+            float powerAfter = power(tmp, grainBoundaryEnergy);
+            
+            if( (powerAfter  >= powerBeffore) )
+            {
+                selectedGrain.setH(oldH);
+                selectedGrain.setId(oldId);
+                selectedGrain.setR(false);
+            }
+            grains.remove(selectedGrain);
+        } 
+        
+    }
+                 catch (FileNotFoundException ex) {
+            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return boardGrain;
+    }
+    
+    private float power(int[][] tab, float grainBoundaryEnergy) {
+        int power = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (tab[i][j] != tab[1][1]) {
+                    power++;
+                }
+            }
+        }
+
+        return power * grainBoundaryEnergy;
+    }
+ 
+//    public Grain[][] reCalculate(int areaSetup, double dT) {
+//        endSimulation = true;
+//        double suma = 0;
+//        ro = reA / reB + (1 - (reA / reB)) * Math.exp(-1 * reB * dT);
+//        //System.out.print(String.format("%.12f   ",ro));
+//        roSr = ro / (size_x * size_y);
+//
+//        for (int i = 0; i < size_x; i++) {
+//            for (int j = 0; j < size_y; j++) {
+//                
+//                if ( (boardGrain[i][j].isB() || contentGrains ) && !boardGrain[i][j].isR()) {
+//                    if (rand.nextDouble() > (1 - recrystalPercent/100)) { // zwiększa ro tylko % ziaren
+//                        double add = roSr * (1.2 + rand.nextDouble() * 0.6);
+//                        boardGrain[i][j].addRo(add);
+//                        endSimulation = false;
+//                    }
+//                    if (boardGrain[i][j].getRo() > roMax) {
+//                        n++;
+//                        boardGrain[i][j].setId(n);
+//                        boardGrain[i][j].setB(false);
+//                        boardGrain[i][j].setR(true);
+//                        boardGrain[i][j].setRo(0);
+//                        countGrainsRecristal++;
+//                        endSimulation = false;
+//                    }
+//                } else {
+//                    double add = roSr * (rand.nextDouble() * 0.3);
+//                    boardGrain[i][j].addRo(add);
+//                }
+//            }
+//        }
+//        
+//
+//        for (int i = 0; i < size_x; i++) {
+//            for (int j = 0; j < size_y; j++) {
+//                boardGrain_tmp[i][j].setId(boardGrain[i][j].getId());
+//            }
+//        }
+//
+//        int tmp[][] = new int[3][3];
+//
+//        for (int i = 0; i < size_x; i++) {
+//            for (int j = 0; j < size_y; j++) {
+//                if (!boardGrain[i][j].isR()){
+//                    if (areaSetup == 7) {
+//                        tmp = createArea(i, j, 6, true);
+//                        board_tmp[i][j] = area(tmp);
+//                    } else {
+//                        tmp = createArea(i, j, areaSetup, true);
+//                        board_tmp[i][j] = area(tmp);
+//                    }
+//                    boardGrain_tmp[i][j].setId(board_tmp[i][j]);
+//                }
+//            }
+//        }
+//
+//        for (int i = 0; i < size_x; i++) {
+//            for (int j = 0; j < size_y; j++) {
+//                if (boardGrain_tmp[i][j].getId() > 0) {
+//
+//                    endSimulation = false;
+//                    boardGrain[i][j].setId(boardGrain_tmp[i][j].getId());
+//                    boardGrain[i][j].setB(false);
+//                    boardGrain[i][j].setR(true);
+//                    boardGrain[i][j].setRo(0);
+//                }
+//            }
+//        }
+//        
+//        for (int i = 0; i < size_x; i++) {
+//            for (int j = 0; j < size_y; j++) {
+//                suma += boardGrain[i][j].getRo();
+//            }
+//        }
+//        System.out.println(String.format("%.12f",suma));
+//        
+//        return boardGrain;
+//
+//    }
     
     private int randomArea(int x, int y, int r) {
         int tmp[][];
@@ -452,6 +560,20 @@ public class Board {
             return maxAreas.get(new Random().nextInt(maxAreas.size())).getId();
         }
 
+    }
+    
+    private ArrayList<Grain> getRecrystalizedNeighbours(int x, int y)
+    {
+        ArrayList<Grain> neighbours = new ArrayList<Grain>();
+        for (int k = 0; k < 3; k++) {
+            for (int l = 0; l < 3; l++){
+                int l_x = (size_x + (x - 1 + k)) % size_x;
+                int l_y = (size_y + (y - 1 + l)) % size_y;
+                    if (boardGrain[l_x][l_y].isR())
+                        neighbours.add(boardGrain[l_x][l_y]);
+            }
+        }
+        return neighbours;
     }
     
     private int[][] createArea(int i, int j, int areaSetup, boolean recrystal) {

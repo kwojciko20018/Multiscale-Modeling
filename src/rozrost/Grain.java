@@ -6,11 +6,20 @@ public class Grain {
     private double ro = 0;
     private boolean b = false;
     private boolean r = false;
+    private int H = 0;
     private int R;
     private int G;
     private int B;
     private int x;
     private int y;
+    
+    public void setH(int H) {
+      this.H = H;
+    }
+    
+    public int getH() {
+        return this.H;
+    }
 
     public void setX(int x) {
         this.x = x;
